@@ -1,0 +1,69 @@
+code = [
+    "MOV A, 10",
+    "MOV B, 20",
+    "ADD A, B",
+    "SUB C, D",
+    "JZ loop",
+    "loop:",
+    "MOV E, 30",
+    "JMP end",
+    "end:",
+]
+
+
+
+registers = ["A", "B", "C", "D", "E", "F", "G", "H", "PC", "CR"]
+
+
+# Define uma lista de mnemônicos Assembly válidos
+mnemonics = ["ADD", "SUB", "MOV", "CMP", "JZ", "JNZ", "JMP"]
+
+
+# Define uma função que verifica se um registrador Assembly é válido
+def is_valid_register(register):
+    return register in registers
+
+
+# Define uma função que verifica se um mnemônico Assembly é válido
+def is_valid_mnemonic(mnemonic):
+    return mnemonic in mnemonics
+
+
+# Define uma função que verifica se um parâmetro Assembly é válido (pode ser um registrador ou um valor numérico)
+def is_valid_parameter(param):
+    return param.isdigit() or is_valid_register(param)
+
+
+# Define uma função que verifica a sintaxe de uma linha Assembly
+def validate_line(line):
+    # Divide a linha em partes separadas por espaço em branco
+    parts = line.split()
+   
+    # Se a linha estiver vazia ou começar com um comentário, retorna True (válido)
+    if len(parts) == 0 or parts[0].startswith("--"):
+        return True
+   
+    # Se a linha contiver apenas um rótulo (começa com ":") e terminar com ":" ou com um comentário, retorna True
+    if parts[0].startswith(":") and (parts[0].endswith(":") or len(parts) == 1 or parts[1].startswith("--")):
+        return True
+   
+    # Verifica se o mnemônico é válido
+    if not is_valid_mnemonic(parts[0]):
+        return False
+   
+    # Verifica se a linha contém o número correto de parâmetros para o mnemônico
+    if len(parts) != 2 and len(parts) != 3:
+        return False
+   
+    # Verifica se os parâmetros são válidos
+    if not is_valid_parameter(parts[1]) or (len(parts) == 3 and not is_valid_parameter(parts[2])):
+        return False
+   
+    # A linha é válida se passar em todos os testes anteriores
+    return True
+
+
+# Valida cada linha do código Assembly
+for line in code:
+    if not validate_line(line):
+        print("Erro de sintaxe na linha:", line)
