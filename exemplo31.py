@@ -3,21 +3,13 @@ import re
 def interpreta_asm(asm):
     
     registradores = {}
-    
-    
     labels = {}
-    
-    
     regex = re.compile(r'(?P<label>[a-zA-Z_]+:)?\s*(?P<mnemonico>[a-zA-Z]+)(\s+(?P<reg1>[a-zA-Z]+)(\s*,\s*(?P<reg2>[a-zA-Z0-9]+))?)?')
     
-    
     for i, linha in enumerate(asm):
-       
         match = regex.match(linha)
         
-       
         if match.group('label'):
-            
             labels[match.group('label')[:-1]] = i
             mnemonico = match.group('mnemonico')
             reg1 = match.group('reg1')
@@ -27,11 +19,12 @@ def interpreta_asm(asm):
             reg1 = match.group('reg1')
             reg2 = match.group('reg2')
         
-        
-        if mnemonico:
-           
-            if mnemonico == 'MOVE':
-                registradores[reg1] = int(reg2)
+            if mnemonico:
+             if mnemonico == 'MOVE':
+                if reg2 in registradores:
+                    registradores[reg1] = registradores[reg2]
+                else:
+                    registradores[reg1] = int(reg2)
             elif mnemonico == 'ADD':
                 registradores[reg1] = registradores.get(reg1, 0) + registradores.get(reg2, 0)
             elif mnemonico == 'SUB':
@@ -57,6 +50,10 @@ def interpreta_asm(asm):
                 i = labels[reg1] - 1
             elif mnemonico == 'HALT':
                 return registradores
+    return registradores
+
+
+
 codigo_asm = [
     'MOVE A,6',
     'MOVE B,5',

@@ -15,7 +15,7 @@ def interpreta_asm(asm):
             tokens = tokens[1:]
         
         if len(tokens) > 0:
-            
+            mnemonico = 0
             # verifica qual é a instrução e executa a operação correspondente
             if mnemonico == 'MOVE':
                 registradores[tokens[1]] = int(tokens[2])
@@ -46,16 +46,16 @@ def interpreta_asm(asm):
                 return registradores
 
 codigo_asm = [
-    'MOVE A,6',
-    'MOVE B,5',
-    'enquanto:MOVE C,B',
-    'CMP B,1',
+    'MOVE A , 6',
+    'MOVE B ,5',
+    'enquanto:MOVE C, B',
+    'CMP B , 1',
     'JTRUE fim',
-    'MOVE B,C',
-    'MULT A,B',
-    'SUB B,1',
+    'MOVE B , C',
+    'MULT A , B',
+    'SUB B , 1',
     'JUMP enquanto',
-    'fim:HALT'
+    'fim: HALT'
 ]
 
 registradores = interpreta_asm(codigo_asm)
