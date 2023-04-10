@@ -1,5 +1,10 @@
 import re
 
+#Upper() - para ser indiferente letras maiusculas e minunsculas
+#Strip() - retira os espaços 
+
+
+
 def interpreta_asm(asm):
     
     registradores = {}
@@ -14,10 +19,12 @@ def interpreta_asm(asm):
             mnemonico = match.group('mnemonico')
             reg1 = match.group('reg1')
             reg2 = match.group('reg2')
+            
         else:
             mnemonico = match.group('mnemonico')
             reg1 = match.group('reg1')
             reg2 = match.group('reg2')
+            
         
             if mnemonico:
              if mnemonico == 'MOVE':
@@ -25,6 +32,9 @@ def interpreta_asm(asm):
                     registradores[reg1] = registradores[reg2]
                 else:
                     registradores[reg1] = int(reg2)
+                    
+                    # tenta converter uma string que não representa um número 
+                    # o segundo argumento do comando MOVE é um número, mas ele pode ser um nome de registrador.        
             elif mnemonico == 'ADD':
                 registradores[reg1] = registradores.get(reg1, 0) + registradores.get(reg2, 0)
             elif mnemonico == 'SUB':
@@ -55,19 +65,12 @@ def interpreta_asm(asm):
 
 
 codigo_asm = [
-    'MOVE A,6',
-    'MOVE B,5',
-    'enquanto:',
-    'MOVE C,B',
-    'CMP B,1',
-    'JTRUE fim',
-    'MOVE B,C',
-    'MULT A,B',
-    'SUB B,1',
-    'JUMP enquanto',
-    'fim:',
+    'MOVE A,10',
+    'MOVE B,35',
+    'ADD A,B',
     'HALT'
 ]
+
 
 resultado = interpreta_asm(codigo_asm)
 
